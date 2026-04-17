@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BİR - Passo Biletleri</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #008080; color: white; padding: 20px; }
+        .section-title { font-size: 1.1rem; font-weight: bold; margin: 20px 0 10px 0; color: #ffd700; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; }
+        .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 15px; }
+        .row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .btn { background: #fff; color: #008080; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        .back { color: white; text-decoration: none; opacity: 0.7; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <a href="dashboard.html" class="back">← Geri Dön</a>
+    <h2>🏟️ Passo Bilet</h2>
+
+    <div class="section-title">GÜNCEL MAÇLAR</div>
+    
+    <div class="card">
+        <b>Beşiktaş - Fenerbahçe</b><br><small>Tüpraş Stadyumu | 19 Nisan</small>
+        <div class="row"><span>450 TL</span><button class="btn" onclick="buy('BJK-FB Maçı', 450)">AL</button></div>
+    </div>
+
+    <div class="card">
+        <b>Sivasspor - Galatasaray</b><br><small>4 Eylül Stadyumu | 21 Nisan</small>
+        <div class="row"><span>250 TL</span><button class="btn" onclick="buy('Sivas-GS Maçı', 250)">AL</button></div>
+    </div>
+
+    <div class="card">
+        <b>Trabzonspor - Beşiktaş</b><br><small>Papara Park | 26 Nisan</small>
+        <div class="row"><span>350 TL</span><button class="btn" onclick="buy('TS-BJK Maçı', 350)">AL</button></div>
+    </div>
+
+    <div class="section-title">KONSERLER</div>
+
+    <div class="card">
+        <b>MANIFEST - Live</b><br><small>KüçükÇiftlik Park | 30 Mayıs</small>
+        <div class="row"><span>600 TL</span><button class="btn" onclick="buy('MANIFEST Konseri', 600)">AL</button></div>
+    </div>
+
+    <script>
+        function buy(name, price) {
+            let balance = parseFloat(localStorage.getItem('userBalance')) || 530.00;
+
+            if (balance >= price) {
+                // Bakiyeyi güncelle
+                localStorage.setItem('userBalance', balance - price);
+
+                // Biletlerim listesine ekle
+                let tickets = JSON.parse(localStorage.getItem('myTickets')) || [];
+                tickets.push({ title: name, date: '2026', code: 'PSS-' + Math.floor(Math.random()*9000) });
+                localStorage.setItem('myTickets', JSON.stringify(tickets));
+
+                // --- SMS SİSTEMİNİ TETİKLE ---
+                localStorage.setItem('ticketOrdered', 'true');
+                localStorage.setItem('lastTicketName', name);
+
+                // İlk SMS'i hemen gönder
+                let msgs = JSON.parse(localStorage.getItem('myMessages')) || [];
+                msgs.push("BİR Passo: " + name + " biletiniz başarıyla alındı.");
+                localStorage.setItem('myMessages', JSON.stringify(msgs));
+
+                alert("Bilet Alındı! Dashboard'da mesajlarını kontrol et kanka.");
+                window.location.href = "dashboard.html";
+            } else {
+                alert("Bakiye yetersiz müdürüm!");
+            }
+        }
+    </script>
+</body>
+</html>

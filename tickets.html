@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BİR - Uçak Bileti</title>
+    <style>
+        body { 
+            margin: 0; font-family: 'Segoe UI', sans-serif; 
+            background: #008080; color: white; padding: 20px; 
+        }
+        .flight-card { 
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+            padding: 20px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2); 
+            margin-bottom: 20px;
+        }
+        .route { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .city { font-size: 1.2rem; font-weight: bold; }
+        .plane-icon { font-size: 1.5rem; color: #ffd700; transform: rotate(90deg); }
+        .details { font-size: 0.8rem; opacity: 0.8; display: flex; justify-content: space-between; }
+        .price-tag { 
+            display: flex; justify-content: space-between; 
+            align-items: center; margin-top: 15px; border-top: 1px dashed rgba(255,255,255,0.3);
+            padding-top: 15px;
+        }
+        .amount { font-size: 1.3rem; font-weight: bold; color: #40E0D0; }
+        .buy-btn { 
+            background: #fff; color: #008080; border: none; 
+            padding: 10px 25px; border-radius: 12px; 
+            font-weight: bold; cursor: pointer; 
+        }
+        .back { color: white; text-decoration: none; font-size: 0.9rem; opacity: 0.7; }
+    </style>
+</head>
+<body>
+
+    <a href="dashboard.html" class="back">← Dashboard</a>
+    <h2 style="margin-top: 15px;">✈️ Uçak Seferleri</h2>
+
+    <div class="flight-card">
+        <div class="route">
+            <div class="city">VAN <br><small style="font-size:0.7rem; font-weight:normal;">VAN</small></div>
+            <div class="plane-icon">✈️</div>
+            <div class="city" style="text-align:right;">IST <br><small style="font-size:0.7rem; font-weight:normal;">ISTANBUL</small></div>
+        </div>
+        <div class="details">
+            <span>📅 22 Nisan, Çarşamba</span>
+            <span>⏰ 14:30</span>
+        </div>
+        <div class="price-tag">
+            <div class="amount">₺420.00</div>
+            <button class="buy-btn" onclick="buyFlight('Van - İstanbul Uçuşu', 420, 'TK-1903')">BİLET AL</button>
+        </div>
+    </div>
+
+    <div class="flight-card">
+        <div class="route">
+            <div class="city">SVS <br><small style="font-size:0.7rem; font-weight:normal;">SIVAS</small></div>
+            <div class="plane-icon">✈️</div>
+            <div class="city" style="text-align:right;">AYT <br><small style="font-size:0.7rem; font-weight:normal;">ANTALYA</small></div>
+        </div>
+        <div class="details">
+            <span>📅 24 Nisan, Cuma</span>
+            <span>⏰ 09:15</span>
+        </div>
+        <div class="price-tag">
+            <div class="amount">₺350.00</div>
+            <button class="buy-btn" onclick="buyFlight('Sivas - Antalya Uçuşu', 350, 'PC-5858')">BİLET AL</button>
+        </div>
+    </div>
+
+    <div class="flight-card">
+        <div class="route">
+            <div class="city">IST <br><small style="font-size:0.7rem; font-weight:normal;">ISTANBUL</small></div>
+            <div class="plane-icon">✈️</div>
+            <div class="city" style="text-align:right;">AMS <br><small style="font-size:0.7rem; font-weight:normal;">AMSTERDAM</small></div>
+        </div>
+        <div class="details">
+            <span>📅 15 Haziran, Pazartesi</span>
+            <span>⏰ 11:00</span>
+        </div>
+        <div class="price-tag">
+            <div class="amount">₺850.00</div>
+            <button class="buy-btn" onclick="buyFlight('İstanbul - Amsterdam Uçuşu', 850, 'KLM-2026')">BİLET AL</button>
+        </div>
+    </div>
+
+    <script>
+        function buyFlight(name, price, flightNo) {
+            let balance = parseFloat(localStorage.getItem('userBalance')) || 530.00;
+
+            if (balance >= price) {
+                // Bakiyeyi güncelle
+                localStorage.setItem('userBalance', balance - price);
+
+                // Biletlerim listesine ekle
+                let tickets = JSON.parse(localStorage.getItem('myTickets')) || [];
+                tickets.push({ 
+                    title: name, 
+                    date: '2026 Seferi', 
+                    code: flightNo 
+                });
+                localStorage.setItem('myTickets', JSON.stringify(tickets));
+
+                // --- SMS SİSTEMİNİ TETİKLE ---
+                localStorage.setItem('ticketOrdered', 'true');
+                localStorage.setItem('lastTicketName', name);
+
+                // İlk SMS'i hemen gönder
+                let msgs = JSON.parse(localStorage.getItem('myMessages')) || [];
+                msgs.push("BİR Ulaşım: " + name + " biletiniz onaylandı. PNR: " + flightNo);
+                localStorage.setItem('myMessages', JSON.stringify(msgs));
+
+                alert("Uçak biletiniz hazır! İyi uçuşlar müdürüm.");
+                window.location.href = "dashboard.html";
+            } else {
+                alert("Bakiye yetersiz! Cüzdana takviye yapman lazım.");
+            }
+        }
+    </script>
+</body>
+</html>

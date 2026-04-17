@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BİR - BİZ QR Kamera</title>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; font-family: sans-serif; overflow: hidden; }
+        
+        /* Gerçek Kamera Görüntüsü */
+        #video-preview {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Üst Katman Arayüzü */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none; /* Tıklamalar arkaya geçsin diye */
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 40px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 12px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            z-index: 20;
+            pointer-events: auto; /* Buton tıklanabilir olmalı */
+        }
+
+        /* Tarama Çerçevesi */
+        .scan-window {
+            width: 260px;
+            height: 260px;
+            border: 3px solid #40E0D0;
+            border-radius: 30px;
+            position: relative;
+            box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.5); /* Etrafı karartır */
+        }
+
+        /* Hareketli Tarama Çizgisi */
+        .scan-line {
+            width: 100%;
+            height: 3px;
+            background: #40E0D0;
+            position: absolute;
+            top: 0;
+            box-shadow: 0 0 15px #40E0D0;
+            animation: scanAnim 2s linear infinite;
+        }
+
+        @keyframes scanAnim {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        .instruction {
+            position: absolute;
+            bottom: 120px;
+            background: rgba(0,0,0,0.7);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="dashboard.html" class="back-btn">✕ Kapat ve Geri Dön</a>
+
+    <video id="camera-stream" autoplay playsinline></video>
+
+    <div class="overlay">
+        <div class="scan-window">
+            <div class="scan-line"></div>
+        </div>
+        <div class="instruction">BİZ QR Kodunu Çerçeveye Hizalayın</div>
+    </div>
+
+    <script>
+        const video = document.getElementById('camera-stream');
+
+        // Kamerayı Başlatma Fonksiyonu
+        async function initCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: "environment", // Arka kamerayı zorla
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    }, 
+                    audio: false 
+                });
+                video.srcObject = stream;
+            } catch (err) {
+                console.error("Kamera erişim hatası:", err);
+                alert("Müdürüm kamerayı açamadık. Tarayıcı izinlerini kontrol et veya HTTPS üzerinden bağlandığından emin ol.");
+            }
+        }
+
+        // Sayfa yüklenince kamerayı aç
+        window.addEventListener('load', initCamera);
+
+        // Sayfadan çıkarken kamerayı kapat (Enerji tasarrufu)
+        window.addEventListener('beforeunload', () => {
+            if (video.srcObject) {
+                video.srcObject.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+</html>

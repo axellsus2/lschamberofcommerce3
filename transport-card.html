@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BİR-Geç Kart</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #111; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        
+        /* Kart Tasarımı */
+        .transport-card {
+            width: 320px; height: 200px;
+            background: linear-gradient(135deg, #00d4d4 0%, #008080 100%);
+            border-radius: 20px; position: relative; padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 212, 212, 0.4);
+            overflow: hidden; border: 1px solid rgba(255,255,255,0.2);
+            animation: cardFloat 3s ease-in-out infinite;
+        }
+        @keyframes cardFloat { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-10px);} }
+
+        .chip { width: 45px; height: 35px; background: #ffd700; border-radius: 5px; margin-bottom: 20px; }
+        .card-name { font-size: 1.5rem; font-weight: 900; letter-spacing: 2px; }
+        .nfc-icon { position: absolute; right: 20px; top: 20px; font-size: 1.5rem; opacity: 0.8; }
+        .balance-info { position: absolute; bottom: 20px; left: 20px; }
+        
+        .scan-status { margin-top: 40px; text-align: center; }
+        .wave { font-size: 3rem; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% {opacity: 0.3;} 50% {opacity: 1;} 100% {opacity: 0.3;} }
+        
+        .back-btn { position: absolute; top: 30px; left: 20px; color: white; text-decoration: none; font-size: 1.5rem; }
+    </style>
+</head>
+<body>
+
+    <a href="dashboard.html" class="back-btn">✕</a>
+
+    <div class="transport-card" onclick="payTransport()">
+        <div class="nfc-icon">📶</div>
+        <div class="chip"></div>
+        <div class="card-name">BİR-GEÇ</div>
+        <div class="balance-info">
+            <small>TÜM TÜRKİYE GEÇERLİ</small><br>
+            <b id="card-bal" style="font-size: 1.2rem;">₺530.00</b>
+        </div>
+    </div>
+
+    <div class="scan-status">
+        <div class="wave">📱💨</div>
+        <p>Turnikeye Yaklaştırın...</p>
+        <small style="opacity: 0.5;">(Ödeme yapmak için karta tıkla)</small>
+    </div>
+
+    <script>
+        // Bakiyeyi güncelle
+        document.getElementById('card-bal').innerText = "₺" + (parseFloat(localStorage.getItem('userBalance')) || 530).toFixed(2);
+
+        function payTransport() {
+            let bal = parseFloat(localStorage.getItem('userBalance')) || 530;
+            let ucret = 15; // Şehir içi standart ücret
+
+            if(bal >= ucret) {
+                localStorage.setItem('userBalance', bal - ucret);
+                
+                // Mesaj gönder
+                let msgs = JSON.parse(localStorage.getItem('myMessages')) || [];
+                msgs.push("BİR-Geç: Ödeme başarılı. Kalan bakiye: ₺" + (bal - ucret).toFixed(2));
+                localStorage.setItem('myMessages', JSON.stringify(msgs));
+
+                alert("BİİİP! Geçiş Onaylandı. İyi yolculuklar müdürüm!");
+                window.location.href = "dashboard.html";
+            } else {
+                alert("Bakiye yetersiz! Otobüste kalma, Pomeyç kodunu kullan.");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BİR Yemek - Restoranlar</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #008080; color: white; padding: 20px; }
+        .rest-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 20px; border-radius: 20px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .rest-card:hover { background: rgba(255,255,255,0.2); }
+        .back-btn { color: white; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <a href="dashboard.html" class="back-btn">← Ana Sayfa</a>
+    <h2 style="margin-top:20px;">🍕 BİR Yemek</h2>
+    <p style="opacity:0.8;">Hızlı, sıcak ve öğrenci dostu.</p>
+
+    <div class="rest-card" onclick="location.href='donercim.html'">
+        <div><strong>🌯 Dönercim</strong><br><small>Hızlı ve lezzetli</small></div>
+        <span>➔</span>
+    </div>
+    <div class="rest-card" onclick="location.href='pizzacim.html'">
+        <div><strong>🍕 Pizzacım</strong><br><small>Bol malzeme</small></div>
+        <span>➔</span>
+    </div>
+    <div class="rest-card" onclick="location.href='lahmacuncum.html'">
+        <div><strong>🌯 Lahmacuncum</strong><br><small>Geleneksel çıtır</small></div>
+        <span>➔</span>
+    </div>
+    <div class="rest-card" onclick="location.href='pidecim.html'">
+        <div><strong>🥖 Pidecim</strong><br><small>Sivas usulü</small></div>
+        <span>➔</span>
+    </div>
+</body>
+</html>

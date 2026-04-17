@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomeyç Inc.</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #40E0D0; font-family: sans-serif; }
+        canvas { display: block; background: #40E0D0; }
+        #ui { position: absolute; top: 20px; width: 100%; text-align: center; color: white; font-size: 24px; font-weight: bold; pointer-events: none; }
+        .back { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.5); color: white; padding: 10px; border-radius: 10px; text-decoration: none; z-index: 10; }
+    </style>
+</head>
+<body>
+    <a href="apps.html" class="back">← Vazgeç</a>
+    <div id="ui">Skor: <span id="score">0</span> / 5</div>
+    <canvas id="game"></canvas>
+
+    <script>
+        const canvas = document.getElementById('game');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+
+        let bird = { x: 50, y: canvas.height/2, v: 0, g: 0.6 };
+        let pipes = [];
+        let score = 0;
+        let gameActive = true;
+
+        function draw() {
+            if (!gameActive) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            bird.v += bird.g; bird.y += bird.v;
+            ctx.fillStyle = "white"; ctx.fillRect(bird.x, bird.y, 30, 30);
+
+            if (Date.now() % 100 < 2) pipes.push({ x: canvas.width, h: Math.random() * (canvas.height - 200) + 50 });
+
+            pipes.forEach((p, i) => {
+                p.x -= 3;
+                ctx.fillStyle = "#008080";
+                ctx.fillRect(p.x, 0, 50, p.h);
+                ctx.fillRect(p.x, p.h + 150, 50, canvas.height);
+
+                if (p.x === 50) { score++; document.getElementById('score').innerText = score; }
+                if (score >= 5) win();
+                if (bird.x < p.x + 50 && bird.x + 30 > p.x && (bird.y < p.h || bird.y + 30 > p.h + 150)) location.reload();
+            });
+            if (bird.y > canvas.height || bird.y < 0) location.reload();
+            requestAnimationFrame(draw);
+        }
+
+        function win() {
+            gameActive = false;
+            let bal = parseFloat(localStorage.getItem('userBalance')) || 530;
+            localStorage.setItem('userBalance', bal + 25);
+            localStorage.setItem('lastSMS', 'Pomeyç Inc: Oyun birinciliği ödülü +25 TL yüklendi!');
+            alert("TEBRİKLER MÜDÜRÜM! 25 TL kazandın.");
+            window.location.href = "dashboard.html";
+        }
+
+        window.onclick = () => bird.v = -10;
+        draw();
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BİR-Evim Kontrol</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #002b2b; color: white; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .shop-link { background: #40E0D0; color: #000; padding: 10px 18px; border-radius: 15px; font-weight: bold; text-decoration: none; font-size: 0.8rem; box-shadow: 0 4px 15px rgba(64, 224, 208, 0.3); }
+        
+        /* Güvenlik Paneli */
+        .security-status { 
+            background: linear-gradient(145deg, #004040, #003333); 
+            padding: 20px; border-radius: 25px; margin-bottom: 20px; 
+            border: 1px solid rgba(255, 59, 48, 0.3); text-align: center;
+        }
+        
+        .control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .device-card { 
+            background: rgba(255,255,255,0.08); padding: 18px; border-radius: 22px; 
+            text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;
+        }
+        .active { background: rgba(64, 224, 208, 0.15); border-color: #40E0D0; }
+        .locked { border-color: #ff3b30; background: rgba(255, 59, 48, 0.1); }
+        
+        .icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+        .status { font-size: 0.7rem; opacity: 0.8; display: block; margin-top: 5px; }
+        .btn-toggle { width: 100%; margin-top: 10px; padding: 10px; border-radius: 12px; border: none; cursor: pointer; font-weight: bold; background: #fff; color: #002b2b; }
+        .btn-lock { background: #ff3b30; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="dashboard.html" style="color:white; text-decoration:none;">← Dashboard</a>
+        <a href="shop.html" class="shop-link">🛒 BİR MAĞAZA</a>
+    </div>
+
+    <div class="security-status" id="securityPanel">
+        <div style="font-size: 0.7rem; opacity: 0.8; letter-spacing: 1px;">BİR-GEÇ GÜVENLİK SİSTEMİ</div>
+        <h2 id="lockText" style="margin: 10px 0; color: #ff3b30;">KAPI KİLİTLİ 🔒</h2>
+        <button class="btn-toggle" id="lockBtn" onclick="toggleLock()" style="background:#ff3b30; color:white;">KİLİDİ AÇ</button>
+        <button class="btn-toggle" onclick="alert('Misafiriniz için 15 dakikalık geçici QR kod oluşturuldu ve SMS olarak gönderildi.')" style="margin-top:10px; background:rgba(255,255,255,0.2); color:white;">MİSAFİR GİRİŞİ (QR)</button>
+    </div>
+
+    <div class="control-grid">
+        <div class="device-card" id="robot">
+            <span class="icon">🤖</span><b>BİR-Bot</b>
+            <span class="status">Devriyede</span>
+            <button class="btn-toggle" onclick="this.parentElement.classList.toggle('active')">BAŞLAT</button>
+        </div>
+        <div class="device-card" id="oven">
+            <span class="icon">🍳</span><b>Akıllı Fırın</b>
+            <span class="status">Kapalı</span>
+            <button class="btn-toggle" onclick="this.parentElement.classList.toggle('active')">PİŞİR</button>
+        </div>
+        <div class="device-card">
+            <span class="icon">📺</span><b>Smart TV</b>
+            <span class="status">Uyku Modu</span>
+            <button class="btn-toggle">AÇ</button>
+        </div>
+        <div class="device-card">
+            <span class="icon">💡</span><b>Işıklar</b>
+            <span class="status">Otomatik</span>
+            <button class="btn-toggle">KAPAT</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleLock() {
+            const panel = document.getElementById('securityPanel');
+            const text = document.getElementById('lockText');
+            const btn = document.getElementById('lockBtn');
+            
+            if(text.innerText.includes("KİLİTLİ")) {
+                text.innerText = "KAPI AÇIK 🔓";
+                text.style.color = "#40E0D0";
+                btn.innerText = "KİLİTLE";
+                btn.style.background = "#40E0D0";
+                btn.style.color = "#000";
+                alert("Kapı kilidi açıldı. Hoş geldiniz müdürüm!");
+            } else {
+                text.innerText = "KAPI KİLİTLİ 🔒";
+                text.style.color = "#ff3b30";
+                btn.innerText = "KİLİDİ AÇ";
+                btn.style.background = "#ff3b30";
+                btn.style.color = "white";
+            }
+        }
+    </script>
+</body>
+</html>

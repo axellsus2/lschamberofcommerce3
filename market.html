@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BİR - Dashboard</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #004d4d; color: white; padding: 20px; overflow-x: hidden; }
+        
+        /* Üst Panel */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .user-info h2 { margin: 0; font-size: 1.4rem; letter-spacing: -1px; }
+        .user-info p { margin: 0; opacity: 0.7; font-size: 0.75rem; }
+        
+        .wallet-card { 
+            background: rgba(255, 255, 255, 0.1); padding: 12px 20px; 
+            border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
+            text-align: right; cursor: pointer;
+        }
+        .wallet-card small { display: block; font-size: 0.6rem; opacity: 0.8; }
+        .wallet-card span { font-size: 1.2rem; font-weight: 900; color: #40E0D0; }
+
+        /* Uygulama Izgarası (3 Sütunlu) */
+        .services-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 12px; 
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 22px;
+            padding: 18px 5px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .service-card:active { transform: scale(0.95); background: rgba(64, 224, 208, 0.1); }
+        
+        .service-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+        .service-title { font-size: 0.7rem; font-weight: bold; opacity: 0.9; display: block; }
+
+        /* Bildirim Rozeti (Red Dot) */
+        .badge {
+            position: absolute; top: 5px; right: 10px;
+            background: #ff3b30; color: white; font-size: 0.6rem;
+            width: 16px; height: 16px; border-radius: 50%;
+            display: none; justify-content: center; align-items: center;
+            border: 2px solid #004d4d;
+        }
+
+        /* Kampanya Alanı */
+        .promo {
+            margin-top: 25px;
+            background: linear-gradient(135deg, #40E0D0, #008080);
+            padding: 15px; border-radius: 20px; color: #002b2b;
+            font-size: 0.8rem; font-weight: bold; text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="user-info">
+            <p>Hoş geldin müdürüm,</p>
+            <h2>Efehan Doğru</h2>
+        </div>
+        <div class="wallet-card" onclick="location.href='bank.html'">
+            <small>BİR-CÜZDAN</small>
+            <span id="balanceDisplay">₺530.00</span>
+        </div>
+    </div>
+
+    <div class="services-grid">
+        <div class="service-card" onclick="location.href='bank.html'">
+            <div class="service-icon">🏦</div>
+            <span class="service-title">Banka</span>
+        </div>
+
+        <div class="service-card" onclick="location.href='home.html'" style="border: 1px solid #40E0D0;">
+            <div class="service-icon">🏠</div>
+            <span class="service-title" style="color:#40E0D0;">BİR-Evim</span>
+        </div>
+
+        <div class="service-card" onclick="location.href='market.html'">
+            <div class="service-icon">🛒</div>
+            <span class="service-title">Market</span>
+        </div>
+
+        <div class="service-card" onclick="location.href='shop.html'">
+            <div class="service-icon">🏬</div>
+            <span class="service-title">Mağaza</span>
+        </div>
+
+        <div class="service-card" onclick="alert('BİR-Tık: Konumunuz alınıyor...')">
+            <div class="service-icon">🚕</div>
+            <span class="service-title">Ulaşım</span>
+        </div>
+
+        <div class="service-card" onclick="alert('BİR-Yemek: Restoranlar listeleniyor...')">
+            <div class="service-icon">🍔</div>
+            <span class="service-title">Yemek</span>
+        </div>
+
+        <div class="service-card" onclick="location.href='messages.html'" id="msg-card">
+            <div class="badge" id="msg-badge">0</div>
+            <div class="service-icon">💬</div>
+            <span class="service-title">Mesajlar</span>
+        </div>
+
+        <div class="service-card" onclick="alert('BİR-Passo: Etkinlikler yükleniyor...')">
+            <div class="service-icon">🎟️</div>
+            <span class="service-title">Passo</span>
+        </div>
+
+        <div class="service-card" onclick="alert('BİR-Müzik: Çalma listesi hazır!')">
+            <div class="service-icon">🎵</div>
+            <span class="service-title">Müzik</span>
+        </div>
+    </div>
+
+    <div class="promo">
+        🌟 BİR-Market'te ilk siparişe %20 İndirim!
+    </div>
+
+    <script>
+        window.onload = function() {
+            // Bakiye Güncelleme
+            let balance = localStorage.getItem('userBalance') || 530;
+            document.getElementById('balanceDisplay').innerText = "₺" + parseFloat(balance).toFixed(2);
+
+            // Mesaj Bildirim Kontrolü (Red Dot)
+            let msgs = JSON.parse(localStorage.getItem('myMessages')) || [];
+            let badge = document.getElementById('msg-badge');
+            let unread = localStorage.getItem('unreadCount');
+
+            if(msgs.length > 0 && unread !== '0') {
+                badge.style.display = 'flex';
+                badge.innerText = msgs.length;
+            }
+        };
+    </script>
+</body>
+</html>

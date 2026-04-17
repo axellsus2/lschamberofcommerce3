@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BİR Müzik - Premium</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: white; padding: 20px; }
+        .premium-card { 
+            background: linear-gradient(135deg, #ffd700, #b8860b); 
+            color: #000; padding: 25px; border-radius: 25px; 
+            text-align: center; margin-bottom: 30px; 
+        }
+        .player-container { display: none; }
+        .video-box { 
+            background: #1c1c1e; padding: 15px; border-radius: 20px; 
+            margin-bottom: 20px; border: 1px solid #333;
+        }
+        iframe { width: 100%; border-radius: 12px; border: none; aspect-ratio: 16/9; }
+        .buy-btn { 
+            background: #000; color: #fff; border: none; padding: 12px 25px; 
+            border-radius: 12px; font-weight: bold; cursor: pointer;
+        }
+        .back { color: #40E0D0; text-decoration: none; font-weight: bold; margin-bottom: 20px; display: inline-block; }
+    </style>
+</head>
+<body>
+
+    <a href="dashboard.html" class="back">← Dashboard'a Dön</a>
+    <h2>🎵 BİR Müzik</h2>
+
+    <div id="lock-screen">
+        <div class="premium-card">
+            <h3>Premium Üyelik Gerekli</h3>
+            <p>TAM Tarife (Öğrenci Doğrulanmadı)</p>
+            <div style="font-size: 1.5rem; font-weight: bold; margin: 10px 0;">50 TL / AY</div>
+            <button class="buy-btn" onclick="activatePremium()">ABONELİĞİ BAŞLAT</button>
+        </div>
+    </div>
+
+    <div id="player-screen" class="player-container">
+        <p style="color: #ffd700;">✨ Premium Hesabınız Aktif</p>
+        
+        <div class="video-box">
+            <h4>1. Tubity Hits - Global</h4>
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+        </div>
+
+        <div class="video-box">
+            <h4>2. BİR Özel Mix</h4>
+            <iframe src="https://www.youtube.com/embed/jfKfPfyJRdk" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            if(localStorage.getItem('musicPremium') === 'true') {
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('player-screen').style.display = 'block';
+            }
+        };
+
+        function activatePremium() {
+            let balance = parseFloat(localStorage.getItem('userBalance')) || 530.00;
+            const price = 50.00;
+
+            if(balance >= price) {
+                localStorage.setItem('userBalance', balance - price);
+                localStorage.setItem('musicPremium', 'true');
+                
+                let msgs = JSON.parse(localStorage.getItem('myMessages')) || [];
+                msgs.push("BİR Müzik: Aboneliğiniz onaylandı. 50 TL bakiyenizden düşüldü.");
+                localStorage.setItem('myMessages', JSON.stringify(msgs));
+
+                alert("Abonelik Başarılı! Keyifli dinlemeler.");
+                location.reload(); // Dashboard'a atmıyoruz, sayfayı yeniliyoruz.
+            } else {
+                alert("Müdürüm bakiye yetersiz!");
+            }
+        }
+    </script>
+</body>
+</html>

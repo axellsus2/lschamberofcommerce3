@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elayt.io</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #111; color: white; font-family: sans-serif; }
+        canvas { display: block; }
+        #ui { position: absolute; top: 20px; width: 100%; text-align: center; pointer-events: none; font-size: 20px; }
+    </style>
+</head>
+<body>
+    <div id="ui">Hedef: <span id="sc">0</span> / 10</div>
+    <canvas id="io"></canvas>
+
+    <script>
+        const c = document.getElementById('io');
+        const ctx = c.getContext('2d');
+        c.width = window.innerWidth; c.height = window.innerHeight;
+
+        let p = { x: c.width/2, y: c.height/2, r: 15 };
+        let foods = [];
+        let score = 0;
+
+        function loop() {
+            ctx.fillStyle = "#111"; ctx.fillRect(0, 0, c.width, c.height);
+            
+            ctx.fillStyle = "#40E0D0"; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+
+            if (foods.length < 10) foods.push({ x: Math.random()*c.width, y: Math.random()*c.height });
+
+            foods.forEach((f, i) => {
+                ctx.fillStyle = "red"; ctx.beginPath(); ctx.arc(f.x, f.y, 8, 0, Math.PI*2); ctx.fill();
+                if (Math.hypot(p.x - f.x, p.y - f.y) < p.r) {
+                    foods.splice(i, 1); score++; p.r += 2;
+                    document.getElementById('sc').innerText = score;
+                    if (score >= 10) {
+                        let bal = parseFloat(localStorage.getItem('userBalance')) || 530;
+                        localStorage.setItem('userBalance', bal + 15);
+                        localStorage.setItem('lastSMS', 'Elayt.io: Seviye atlama ödülü +15 TL yüklendi!');
+                        alert("Müdürüm Elayt.io'yu fethettin! +15 TL bakiye yattı.");
+                        window.location.href = "dashboard.html";
+                    }
+                }
+            });
+            requestAnimationFrame(loop);
+        }
+
+        window.onmousemove = (e) => { p.x = e.clientX; p.y = e.clientY; };
+        window.ontouchmove = (e) => { p.x = e.touches[0].clientX; p.y = e.touches[0].clientY; };
+        loop();
+    </script>
+</body>
+</html>

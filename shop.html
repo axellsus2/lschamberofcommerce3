@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BİR - Alışveriş Merkezi</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #1a1a1a; }
+        
+        header { 
+            background: linear-gradient(135deg, #004d4d 0%, #002b2b 100%); 
+            color: white; padding: 25px 20px; text-align: center;
+        }
+
+        .nav-tabs {
+            display: flex; background: white; border-bottom: 2px solid #ddd;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .tab { 
+            flex: 1; text-align: center; padding: 15px; cursor: pointer; 
+            font-weight: bold; color: #666; transition: 0.3s;
+        }
+        .tab.active { color: #008080; border-bottom: 4px solid #40E0D0; background: #f9f9f9; }
+
+        .container { max-width: 1000px; margin: auto; padding: 20px; }
+        
+        .product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        
+        .item-card { 
+            background: white; border-radius: 25px; padding: 20px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            border: 1px solid #eee; transition: 0.3s; display: flex; flex-direction: column;
+        }
+        .item-card:hover { transform: translateY(-5px); border-color: #40E0D0; box-shadow: 0 12px 30px rgba(64, 224, 208, 0.2); }
+        
+        .item-img { font-size: 3rem; margin-bottom: 15px; display: block; text-align: center; }
+        .item-info { flex-grow: 1; }
+        .item-info h3 { margin: 5px 0; font-size: 1.1rem; color: #111; }
+        .brand { font-size: 0.7rem; color: #008080; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        .desc { font-size: 0.8rem; color: #666; margin: 10px 0; line-height: 1.4; }
+        .price { font-weight: 900; color: #004d4d; font-size: 1.3rem; margin: 15px 0; }
+        
+        .buy-btn { 
+            width: 100%; background: #111; color: #40E0D0; border: none; 
+            padding: 12px; border-radius: 15px; font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .buy-btn:hover { background: #000; transform: scale(1.02); }
+
+        .hidden { display: none; }
+        .premium-tag { background: #ffd700; color: #000; font-size: 0.6rem; padding: 2px 8px; border-radius: 10px; margin-left: 5px; vertical-align: middle; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 style="margin:0; letter-spacing: -2px;">BİR <span style="font-weight: 300;">EKOSİSTEM</span></h1>
+    <p style="font-size: 0.8rem; opacity: 0.8; margin-top: 5px;">Geleceğin Teknolojileri Burada</p>
+</header>
+
+<div class="nav-tabs">
+    <div class="tab" onclick="switchTab('market', this)">🛒 MARKET</div>
+    <div class="tab active" onclick="switchTab('teknoloji', this)">⚡ TEKNOLOJİ</div>
+</div>
+
+<div class="container">
+    
+    <div id="teknoloji-section" class="product-list">
+        
+        <div class="item-card">
+            <span class="item-img">🔐</span>
+            <div class="item-info">
+                <span class="brand">SECURE-ANKA</span>
+                <h3>BİR-Geç Smart Lock <span class="premium-tag">GÜVENLİK</span></h3>
+                <p class="desc">QR kod ve parmak izi destekli akıllı kilit. Anahtarsız yaşamın kapısını aralayın.</p>
+                <div class="price">₺2.450</div>
+            </div>
+            <button class="buy-btn">SATIN AL</button>
+        </div>
+
+        <div class="item-card">
+            <span class="item-img">👁️</span>
+            <div class="item-info">
+                <span class="brand">SKY-TECH</span>
+                <h3>BİR-Göz 360 Pro</h3>
+                <p class="desc">Yapay zeka destekli güvenlik kamerası. Şüpheli durumlarda BİR-Bot'u otomatik yönlendirir.</p>
+                <div class="price">₺1.900</div>
+            </div>
+            <button class="buy-btn">SATIN AL</button>
+        </div>
+
+        <div class="item-card">
+            <span class="item-img">🤖</span>
+            <div class="item-info">
+                <span class="brand">BİR-DESIGN</span>
+                <h3>BİR-Bot 500S Elite</h3>
+                <p class="desc">Hem süpürür hem de evde güvenlik devriyesi atar. Entegrasyonun zirvesi.</p>
+                <div class="price">₺9.200</div>
+            </div>
+            <button class="buy-btn">SATIN AL</button>
+        </div>
+
+        <div class="item-card" style="border: 2px solid #40E0D0;">
+            <span class="item-img">✨</span>
+            <div class="item-info">
+                <span class="brand">BİR-PRIME</span>
+                <h3>BİR-Vision Hologram</h3>
+                <p class="desc">Sanal asistanınızı 3D olarak evinize yansıtır. Evin ruhu burada hayat buluyor.</p>
+                <div class="price">₺3.200</div>
+            </div>
+            <button class="buy-btn">GELECEĞİ AL</button>
+        </div>
+
+        <div class="item-card">
+            <span class="item-img">📍</span>
+            <div class="item-info">
+                <span class="brand">BİR-CONNECT</span>
+                <h3>BİR-Tag Takip Çipi</h3>
+                <p class="desc">Eşyalarınız veya evcil hayvanlarınız için. Kayıp ağımızla tüm şehirde takip yapın.</p>
+                <div class="price">₺290</div>
+            </div>
+            <button class="buy-btn">SATIN AL</button>
+        </div>
+
+        <div class="item-card">
+            <span class="item-img">🔌</span>
+            <div class="item-info">
+                <span class="brand">ZEN-FIX</span>
+                <h3>BİR-Şarj Akıllı Priz</h3>
+                <p class="desc">Kullanılmayan enerjiyi sisteme satın veya aracınızı paylaşarak para kazanın.</p>
+                <div class="price">₺450</div>
+            </div>
+            <button class="buy-btn">SATIN AL</button>
+        </div>
+
+    </div>
+
+    <div id="market-section" class="product-list hidden">
+        <div class="item-card">
+            <span class="item-img">🍿</span>
+            <span class="brand">LAYS</span>
+            <h3>Klasik Aile Boyu</h3>
+            <div class="price">₺45.00</div>
+            <button class="buy-btn">Sepete Ekle</button>
+        </div>
+        <div class="item-card">
+            <span class="item-img">🧁</span>
+            <span class="brand">ETİ</span>
+            <h3>Popkek Çikolatalı</h3>
+            <div class="price">₺12.50</div>
+            <button class="buy-btn">Sepete Ekle</button>
+        </div>
+        <div class="item-card">
+            <span class="item-img">🥤</span>
+            <span class="brand">COCA COLA</span>
+            <h3>Orijinal Tat 1.5 L</h3>
+            <div class="price">₺35.00</div>
+            <button class="buy-btn">Sepete Ekle</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function switchTab(section, element) {
+        document.getElementById('market-section').classList.add('hidden');
+        document.getElementById('teknoloji-section').classList.add('hidden');
+        
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        
+        document.getElementById(section + '-section').classList.remove('hidden');
+        element.classList.add('active');
+    }
+</script>
+
+</body>
+</html>

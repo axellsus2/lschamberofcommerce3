@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dönercim</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; margin: 0; }
+        .item { background: #fff; padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn { background: #008080; color: white; padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; }
+        .checkout { display: none; background: #fff; padding: 20px; border-radius: 20px; margin-top: 20px; border: 2px solid #008080; }
+        input[type="radio"] { margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <a href="food.html" style="color:#008080; text-decoration:none; font-weight:bold;">← Restoranlar</a>
+    <h3>🌯 Dönercim</h3>
+
+    <div class="item">
+        <div><b>Tavuk Dürüm</b><br>15 TL</div>
+        <button class="btn" onclick="showCheckout(15, 'Tavuk Dürüm')">Sepete Ekle</button>
+    </div>
+    <div class="item">
+        <div><b>Et Dürüm</b><br>25 TL</div>
+        <button class="btn" onclick="showCheckout(25, 'Et Dürüm')">Sepete Ekle</button>
+    </div>
+
+    <div id="checkout-area" class="checkout">
+        <h4>Ödeme ve Teslimat</h4>
+        <p id="order-summary"></p>
+        <p><strong>📍 Adres:</strong> Cart Curt Mah. No:1 SİVAS</p>
+        <hr>
+        <label><input type="radio" name="pay" id="bir-pay" checked> BİR Bakiyesi ile Öde</label><br>
+        <label><input type="radio" name="pay"> Banka / Kredi Kartı</label>
+        <button class="btn" style="width:100%; margin-top:15px;" onclick="processPayment()">ÖDEMEYİ TAMAMLA</button>
+    </div>
+
+    <script>
+        let selectedPrice = 0;
+        let selectedName = "";
+
+        function showCheckout(price, name) {
+            selectedPrice = price;
+            selectedName = name;
+            document.getElementById('order-summary').innerText = name + " - Toplam: " + price + " TL";
+            document.getElementById('checkout-area').style.display = 'block';
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        function processPayment() {
+            let balance = parseFloat(localStorage.getItem('userBalance')) || 530.00;
+            
+            if(document.getElementById('bir-pay').checked) {
+                if(balance >= selectedPrice) {
+                    // Bakiyeyi Düş
+                    localStorage.setItem('userBalance', balance - selectedPrice);
+                    
+                    // SMS Tetiği (Dashboard'a haber verir)
+                    localStorage.setItem('orderTriggered', 'true');
+                    
+                    // İlk Mesajı Anında Gönder
+                    let msgs = JSON.parse(localStorage.getItem('myMessages')) || [];
+                    msgs.push("BİR Yemek: Siparişiniz alındı! Hazırlanıyor...");
+                    localStorage.setItem('myMessages', JSON.stringify(msgs));
+
+                    alert("Ödeme başarılı! Siparişiniz hazırlanıyor kanka.");
+                    window.location.href = "dashboard.html";
+                } else {
+                    alert("Bakiye yetersiz müdürüm! Pomeyç kodunu kullan.");
+                }
+            } else {
+                alert("Kartla ödeme demoda aktif değil, BİR bakiyesini kullan!");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BİR - Mesajlar</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #111; color: white; padding: 20px; }
+        .header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
+        .back-btn { color: #40E0D0; text-decoration: none; font-size: 1.5rem; }
+        
+        .msg-list { display: flex; flex-direction: column; gap: 15px; }
+        .msg-item { 
+            background: #1c1c1e; padding: 15px; border-radius: 18px; 
+            border-left: 4px solid #40E0D0; animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        
+        .msg-item small { color: #888; display: block; margin-bottom: 5px; font-size: 0.7rem; }
+        .msg-item p { margin: 0; font-size: 0.95rem; line-height: 1.4; }
+        
+        .empty-state { text-align: center; margin-top: 100px; opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="dashboard.html" class="back-btn">←</a>
+        <h2 style="margin:0;">Gelen Kutusu</h2>
+    </div>
+
+    <div id="msg-container" class="msg-list">
+        </div>
+
+    <div id="no-msg" class="empty-state" style="display:none;">
+        <div style="font-size: 3rem;">📭</div>
+        <p>Henüz mesajınız yok müdürüm.</p>
+    </div>
+
+    <script>
+        window.onload = function() {
+            let messages = JSON.parse(localStorage.getItem('myMessages')) || [];
+            const container = document.getElementById('msg-container');
+            const emptyState = document.getElementById('no-msg');
+
+            if (messages.length === 0) {
+                emptyState.style.display = 'block';
+            } else {
+                // Mesajları sondan başa (en yeni en üstte) listele
+                messages.reverse().forEach(msg => {
+                    const div = document.createElement('div');
+                    div.className = 'msg-item';
+                    div.innerHTML = `
+                        <small>BİR SİSTEM BİLDİRİMİ</small>
+                        <p>${msg}</p>
+                    `;
+                    container.appendChild(div);
+                });
+
+                // ÖNEMLİ: Mesajlar görüntülendiği için rozeti temizle
+                // Ama mesajlar silinmesin, sadece "görüldü" yapılsın diyorsan:
+                // Bildirim sayısını sıfırlamak için bir flag atıyoruz.
+                localStorage.setItem('unreadCount', '0');
+            }
+        };
+    </script>
+</body>
+</html>
